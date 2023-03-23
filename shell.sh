@@ -22,6 +22,9 @@ function mysqlinstall (){
 	yum -y install mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-client-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-server-5.7.36-1.el7.x86_64.rpm;
+	rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022;
+	yum -y install mysql57-community-release-el7-10.noarch.rpm;
+	yum -y install mysql-community-server-5.7.36;
 	systemctl start mysqld.service;
 }
 function phpinstall(){
