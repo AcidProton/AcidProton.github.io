@@ -4,8 +4,21 @@ function httpdinstall (){
 	yum -y install httpd httpd-manual mod_ssl mod_perl mod_auth_mysql;
 	systemctl start httpd.service;
 }
+function mysqldownload (){
+	touch list.txt;
+	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm' >> list.txt;
+	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-client-5.7.36-1.el7.x86_64.rpm' >> list.txt;
+	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm' >> list.txt;
+	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm' >> list.txt;
+	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm' >> list.txt;
+	wget -i list.txt;
+}
 function mysqlinstall (){
-	rpm -ivh mysql-community-server-5.7.36-1.el6.x86_64.rpm mysql-community-client-5.7.36-1.el6.x86_64.rpm mysql-community-common-5.7.36-1.el6.x86_64.rpm mysql-community-libs-5.7.36-1.el6.x86_64.rpm mysql-community-libs-compat-5.7.36-1.el6.x86_64.rpm
+	rpm -ivh mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-common-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-server-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-client-5.7.36-1.el7.x86_64.rpm
 	systemctl start mysqld.service;
 }
 function phpinstall(){
@@ -18,11 +31,7 @@ function phpinstall(){
 }
 httpdinstall &
 phpinstall &
-wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-server-5.7.36-1.el6.x86_64.rpm &
-wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-client-5.7.36-1.el6.x86_64.rpm &
-wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-common-5.7.36-1.el6.x86_64.rpm &
-wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-5.7.36-1.el6.x86_64.rpm &
-wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el6.x86_64.rpm &
+mysqldownload &
 wait;
 mysqlinstall;
 systemctl restart httpd;
