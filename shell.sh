@@ -5,11 +5,7 @@ function httpdinstall (){
 	systemctl start httpd.service;
 }
 function mysqlinstall (){
-	wget http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm;
-	rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022;
-	yum -y install mysql57-community-release-el7-10.noarch.rpm;
-	yum module disable mysql;
-	yum -y install mysql-community-server;
+	rpm -ivh mysql-community-server-5.7.36-1.el6.x86_64.rpm mysql-community-client-5.7.36-1.el6.x86_64.rpm mysql-community-common-5.7.36-1.el6.x86_64.rpm mysql-community-libs-5.7.36-1.el6.x86_64.rpm mysql-community-libs-compat-5.7.36-1.el6.x86_64.rpm
 	systemctl start mysqld.service;
 }
 function phpinstall(){
@@ -21,9 +17,14 @@ function phpinstall(){
 	mv /var/www/html/phpMyAdmin-4.0.10.20-all-languages /var/www/html/phpmyadmin;
 }
 httpdinstall &
-mysqlinstall &
 phpinstall &
+wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-server-5.7.36-1.el6.x86_64.rpm &
+wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-client-5.7.36-1.el6.x86_64.rpm &
+wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-common-5.7.36-1.el6.x86_64.rpm &
+wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-5.7.36-1.el6.x86_64.rpm &
+wget https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el6.x86_64.rpm &
 wait;
+mysqlinstall;
 systemctl restart httpd;
 pwline=$(grep "password" /var/log/mysqld.log);
 pw=${pwline##*:};
