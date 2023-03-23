@@ -5,6 +5,7 @@ function httpdinstall (){
 	systemctl start httpd.service;
 }
 function mysqldownload (){
+	yum remove mariadb-libs;
 	yum install -y libaio &
 	touch list.txt;
 	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm' >> list.txt;
@@ -15,13 +16,15 @@ function mysqldownload (){
 	wget -i list.txt;
 }
 function mysqlinstall (){
-	rpm -qa |grep -i mysql;
-	rpm -qa |grep -i mariadb;
 	rpm -ivh mysql-community-common-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-client-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-server-5.7.36-1.el7.x86_64.rpm;
+	wget http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm;
+	rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022;
+	yum -y install mysql57-community-release-el7-10.noarch.rpm;
+	yum -y install mysql-community-server;
 	systemctl start mysqld.service;
 }
 function phpinstall(){
