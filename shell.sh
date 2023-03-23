@@ -5,6 +5,7 @@ function httpdinstall (){
 	systemctl start httpd.service;
 }
 function mysqldownload (){
+	yum install -y libaio &
 	touch list.txt;
 	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm' >> list.txt;
 	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-client-5.7.36-1.el7.x86_64.rpm' >> list.txt;
@@ -14,9 +15,9 @@ function mysqldownload (){
 	wget -i list.txt;
 }
 function mysqlinstall (){
-	rpm -ivh mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
-	rpm -ivh mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-common-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-server-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-client-5.7.36-1.el7.x86_64.rpm
 	systemctl start mysqld.service;
@@ -29,9 +30,9 @@ function phpinstall(){
 	unzip phpMyAdmin-4.0.10.20-all-languages.zip -d /var/www/html;
 	mv /var/www/html/phpMyAdmin-4.0.10.20-all-languages /var/www/html/phpmyadmin;
 }
+mysqldownload &
 httpdinstall &
 phpinstall &
-mysqldownload &
 wait;
 mysqlinstall;
 systemctl restart httpd;
