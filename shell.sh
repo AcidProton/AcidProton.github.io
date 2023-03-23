@@ -28,6 +28,7 @@ mysqlinstall;
 systemctl restart httpd;
 pwline=$(grep "password" /var/log/mysqld.log);
 pw=${pwline##*:};
+echo ${pwline};
 echo ${pw};
 mysql -uroot -p --connect-expired-password <<EOF
 set global validate_password_policy = 'LOW';
