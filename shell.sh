@@ -15,11 +15,13 @@ function mysqldownload (){
 	wget -i list.txt;
 }
 function mysqlinstall (){
+	rpm -qa |grep -i mysql;
+	rpm -qa |grep -i mariadb;
 	rpm -ivh mysql-community-common-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
+	rpm -ivh mysql-community-client-5.7.36-1.el7.x86_64.rpm;
 	rpm -ivh mysql-community-server-5.7.36-1.el7.x86_64.rpm;
-	rpm -ivh mysql-community-client-5.7.36-1.el7.x86_64.rpm
 	systemctl start mysqld.service;
 }
 function phpinstall(){
