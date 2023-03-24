@@ -33,8 +33,10 @@ function phpinstall(){
 	mv /var/www/html/phpMyAdmin-4.0.10.20-all-languages /var/www/html/phpmyadmin;
 }
 yum remove mariadb-libs;
-wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
-yum clean all;
+sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+         -e 's|^#baseurl=http://mirror.centos.org/centos|baseurl=https://mirrors.ustc.edu.cn/centos|g' \
+         -i.bak \
+         /etc/yum.repos.d/CentOS-Base.repo
 yum makecache;
 mysqldownload &
 httpdinstall &
