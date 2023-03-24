@@ -35,9 +35,9 @@ function phpinstall(){
 }
 mysqldownload &
 httpdinstall &
-phpinstall &
 wait;
 mysqlinstall;
+phpinstall;
 systemctl restart httpd;
 pwline=$(grep "password" /var/log/mysqld.log);
 pw=${pwline##*:};
