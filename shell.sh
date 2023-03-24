@@ -7,17 +7,17 @@ function httpdinstall (){
 function mysqldownload (){
 	yum install -y libaio;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm;
-	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.41-1.el7.x86_64.rpm;
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
-	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-client-5.7.41-1.el7.x86_64.rpm;
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-client-5.7.36-1.el7.x86_64.rpm;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm;
 }
 function mysqlinstall (){
 	wget http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm;
 	yum -y install mysql-community-common-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-libs-5.7.41-1.el7.x86_64.rpm;
+	yum -y install mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-client-5.7.41-1.el7.x86_64.rpm;
+	yum -y install mysql-community-client-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-server-5.7.36-1.el7.x86_64.rpm;
 	rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022;
 	yum -y install mysql57-community-release-el7-10.noarch.rpm;
