@@ -3,6 +3,8 @@ echo "start install";
 function httpdinstall (){
 	yum -y install httpd httpd-manual mod_ssl mod_perl mod_auth_mysql;
 	systemctl start httpd.service;
+	wget https://labfileapp.oss-cn-hangzhou.aliyuncs.com/phpMyAdmin-4.0.10.20-all-languages.zip --no-check-certificate;
+	yum install -y unzip;
 }
 function mysqldownload (){
 	yum install -y libaio;
@@ -27,17 +29,15 @@ function mysqlinstall (){
 function phpinstall(){
 	yum -y install php php-mysql gd php-gd gd-devel php-xml php-common php-mbstring php-ldap php-pear php-xmlrpc php-imap;
 	echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php;
-	wget https://labfileapp.oss-cn-hangzhou.aliyuncs.com/phpMyAdmin-4.0.10.20-all-languages.zip --no-check-certificate;
-	yum install -y unzip;
 	unzip phpMyAdmin-4.0.10.20-all-languages.zip -d /var/www/html;
 	mv /var/www/html/phpMyAdmin-4.0.10.20-all-languages /var/www/html/phpmyadmin;
 }
 yum remove mariadb-libs;
-sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
-         -e 's|^#baseurl=http://mirror.centos.org/centos|baseurl=https://mirrors.ustc.edu.cn/centos|g' \
-         -i.bak \
-         /etc/yum.repos.d/CentOS-Base.repo
-yum makecache;
+#sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
+#         -e 's|^#baseurl=http://mirror.centos.org/centos|baseurl=https://mirrors.ustc.edu.cn/centos|g' \
+#         -i.bak \
+#         /etc/yum.repos.d/CentOS-Base.repo
+#yum makecache;
 mysqldownload &
 httpdinstall &
 wait;
