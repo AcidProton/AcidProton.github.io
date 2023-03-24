@@ -5,7 +5,7 @@ function httpdinstall (){
 	systemctl start httpd.service;
 }
 function mysqldownload (){
-	yum install -y libaio &
+	yum install -y libaio;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
@@ -35,9 +35,9 @@ function phpinstall(){
 }
 mysqldownload &
 httpdinstall &
-phpinstall &
 wait;
 mysqlinstall;
+phpinstall;
 systemctl restart httpd;
 pwline=$(grep "password" /var/log/mysqld.log);
 pw=${pwline##*:};
