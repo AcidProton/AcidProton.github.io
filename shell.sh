@@ -6,29 +6,27 @@ function httpdinstall (){
 }
 function mysqldownload (){
 	yum install -y libaio &
-	touch list.txt;
-	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm' >> list.txt;
-	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-client-5.7.36-1.el7.x86_64.rpm' >> list.txt;
-	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm' >> list.txt;
-	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm' >> list.txt;
-	echo 'https://mirrors.aliyun.com/mysql/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm' >> list.txt;
-	echo 'http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm' >> list.txt;
-	wget -i list.txt;
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm;
+	yum -y install mysql-community-common-5.7.36-1.el7.x86_64.rpm &
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
+	yum -y install mysql-community-libs-5.7.36-1.el7.x86_64.rpm &
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
+	yum -y install mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm &
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-client-5.7.36-1.el7.x86_64.rpm;
+	yum -y install mysql-community-client-5.7.36-1.el7.x86_64.rpm &
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm;
+	yum -y install mysql-community-server-5.7.36-1.el7.x86_64.rpm &
+	wget http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm;
 }
 function mysqlinstall (){
-	yum remove mariadb-libs;
-	yum -y install mysql-community-common-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-client-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-server-5.7.36-1.el7.x86_64.rpm;
+	#yum remove mariadb-libs;
 	rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022;
 	yum -y install mysql57-community-release-el7-10.noarch.rpm;
 	yum -y install mysql-community-server-5.7.36;
 	systemctl start mysqld.service;
 }
 function phpinstall(){
-	yum -y install php php-mysql gd php-gd gd-devel php-xml php-common php-mbstring php-ldap php-pear php-xmlrpc php-imap;
+	yum -y install php gd php-gd gd-devel php-xml php-common php-mbstring php-ldap php-pear php-xmlrpc php-imap;
 	echo "<?php phpinfo(); ?>" > /var/www/html/phpinfo.php;
 	wget https://labfileapp.oss-cn-hangzhou.aliyuncs.com/phpMyAdmin-4.0.10.20-all-languages.zip --no-check-certificate;
 	yum install -y unzip;
@@ -40,6 +38,7 @@ httpdinstall &
 phpinstall &
 wait;
 mysqlinstall;
+yum -y install php-mysql;
 systemctl restart httpd;
 pwline=$(grep "password" /var/log/mysqld.log);
 pw=${pwline##*:};
