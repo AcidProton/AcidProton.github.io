@@ -16,9 +16,9 @@ function mysqldownload (){
 	yum -y install mysql-community-client-5.7.36-1.el7.x86_64.rpm &
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-server-5.7.36-1.el7.x86_64.rpm &
-	wget http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm;
 }
 function mysqlinstall (){
+	wget http://dev.mysql.com/get/mysql57-community-release-el7-10.noarch.rpm;
 	rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022;
 	yum -y install mysql57-community-release-el7-10.noarch.rpm;
 	yum -y install mysql-community-server-5.7.36;
@@ -38,7 +38,7 @@ sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
          -i.bak \
          /etc/yum.repos.d/CentOS-Base.repo
 yum makecache;
-mysqldownload &
+#mysqldownload &
 httpdinstall &
 wait;
 mysqlinstall;
