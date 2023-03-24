@@ -8,12 +8,12 @@ function mysqldownload (){
 	yum install -y libaio;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-common-5.7.36-1.el7.x86_64.rpm &
-	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-libs-5.7.36-1.el7.x86_64.rpm &
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.41-1.el7.x86_64.rpm;
+	yum -y install mysql-community-libs-5.7.41-1.el7.x86_64.rpm &
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-libs-compat-5.7.36-1.el7.x86_64.rpm &
-	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-client-5.7.36-1.el7.x86_64.rpm;
-	yum -y install mysql-community-client-5.7.36-1.el7.x86_64.rpm &
+	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-client-5.7.41-1.el7.x86_64.rpm;
+	yum -y install mysql-community-client-5.7.41-1.el7.x86_64.rpm &
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-server-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-server-5.7.36-1.el7.x86_64.rpm &
 }
@@ -38,7 +38,7 @@ sudo sed -e 's|^mirrorlist=|#mirrorlist=|g' \
          -i.bak \
          /etc/yum.repos.d/CentOS-Base.repo
 yum makecache;
-#mysqldownload &
+mysqldownload &
 httpdinstall &
 wait;
 mysqlinstall;
