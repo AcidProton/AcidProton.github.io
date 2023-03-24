@@ -6,7 +6,6 @@ function httpdinstall (){
 }
 function mysqldownload (){
 	yum install -y libaio;
-	yum remove mariadb-libs;
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-common-5.7.36-1.el7.x86_64.rpm;
 	yum -y install mysql-community-common-5.7.36-1.el7.x86_64.rpm &
 	wget http://mirrors.ustc.edu.cn/mysql-ftp/Downloads/MySQL-5.7/mysql-community-libs-5.7.36-1.el7.x86_64.rpm;
@@ -33,11 +32,16 @@ function phpinstall(){
 	unzip phpMyAdmin-4.0.10.20-all-languages.zip -d /var/www/html;
 	mv /var/www/html/phpMyAdmin-4.0.10.20-all-languages /var/www/html/phpmyadmin;
 }
+yum remove mariadb-libs;
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+yum clean all;
+yum makecache;
+yum update;
 mysqldownload &
 httpdinstall &
+phpinstall &
 wait;
 mysqlinstall;
-phpinstall;
 systemctl restart httpd;
 pwline=$(grep "password" /var/log/mysqld.log);
 pw=${pwline##*:};
