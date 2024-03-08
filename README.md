@@ -1,4 +1,8 @@
-# 算法
+## 待学习
+
+树状dp，树状数组，线段树，替罪羊树，根号数组，模拟退火，c++stl
+
+# 算论
 
 
 
@@ -8,19 +12,41 @@
 
 ```java
 int n;
-int[] z[]=new int[n+1];
-boolean[] notZ=new boolean[n+1];
-notZ[0]=true;notZ[1]=true;
+int[] prime=new int[n+1];
+boolean[] notPrime=new boolean[n+1];
+notPrime[0]=true;notPrime[1]=true;
+//0,1不是素数
 int cnt=0;
 for(int i=2;i<=n;i++){
-    if(notZ[i]==false) z[cnt++]=i;
-    for(int j=0;j<cnt;j++){
-        if(i*z[j]>n) break;
-        notZ[i*z[j]]=true;
-        if(i%z[j]==0) break;
+    if(notPrime[i]==false) prime[cnt++]=i;
+    // 如果i没有被前面的数筛掉，则i是素数
+    for(int j=1; j<=cnt && i*prime[j]<=n ;j++){
+        // 筛掉i的素数倍，即i的prime[j]倍
+        notPrime[i*prime[j]]=true;
+        if(i%prime[j]==0) break;//error:prime[j]==0
+        // 如果i整除prime[j]，退出循环，保证线性的时间复杂度
     }
 }
 ```
+
+## 埃氏筛
+
+```java
+boolean[] notPrime=new boolean[n+1];
+notPrime[0]=true;notPrime[1]=true;
+for(int i=2;i<=Math.sqrt(n);i++){
+	if (notPrime[i]==false){//i是素数
+		for(int j=i*i;j<=n;j+=i){
+            //筛掉i的倍数
+            notPrime[j]=true;
+         }
+    }
+}
+```
+
+
+
+# 算法
 
 
 
@@ -44,6 +70,10 @@ int search(int[] nums, int target) {
 	while l < r:
 	(1) l = mid, r = mid - 1, 那么 mid = (l + r + 1) >> 1
 	(2) r = mid, l = mid + 1, 那么 mid = (l + r) >> 1
+```
+
+```java
+Arrays.binarySearch(int[] arr, int target);
 ```
 
 
@@ -373,6 +403,11 @@ int c=a*b/gcd(a,b);
 
 ## 单调栈
 
+单调栈可以在时间复杂度为 O(n) 的情况下，求解出某个元素左边或者右边第一个比它大或者小的元素。
+
+所以单调栈一般用于解决一下几种问题：
+
+寻找左 / 右侧第一个比当前元素大 / 小的元素。
 
 
 ## 单调队列
@@ -443,13 +478,11 @@ PriorityQueue<Student> q = new PriorityQueue<Student>((a,b)->{
 
   ```java
   int[] map=new int[length]; //所有节点，下标表示节点，存放父节点下标
-  for(int i=0;i<length;i++) //开始所有节点是根节点，根节点内容为节点本身
-      map[i]=i;
-  }      
+  Arrays.fill(map,-1);//开始所有节点是根节点，根节点内容为-1    
   
   public int find(int[] map,int x){//返回x的根节点
       int p=x;
-      while(p!=map[p]){//找出父节点p
+      while(map[p]!=-1){//找出父节点p
           p=map[p];
       }
       int n=x,n2=x;
@@ -515,5 +548,35 @@ public boolean exist(String str,TrieNode root){
     }
     return root.count>0;
 }
+```
+
+
+
+## 树状数组
+
+区间和	查询和更新的时间复杂度为O(logn)
+
+```java
+class Fenwick {
+    private final int[] tree;
+    public Fenwick(int n) {
+        tree = new int[n+1];
+    }
+    // 把下标为 i 的元素增加 x , i>0
+    public void add(int index, int x) {
+        for(int i=index+1; i<tree.length; i += i&-i) {
+            tree[i] += x;
+        }
+    }
+    // 返回下标在 [0,i) 的元素之和
+    public int pre(int index) {
+        int res = 0;
+        for(int i=index; i>0; i -= i&-i){
+            res += tree[i];
+        }
+        return res;
+    }
+}
+
 ```
 
