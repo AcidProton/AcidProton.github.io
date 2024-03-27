@@ -31,6 +31,8 @@ for(int i=2;i<=n;i++){
 
 ## 埃氏筛
 
+获取范围内的质数
+
 ```java
 boolean[] notPrime=new boolean[n+1];
 notPrime[0]=true;notPrime[1]=true;
@@ -42,6 +44,38 @@ for(int i=2;i<=Math.sqrt(n);i++){
          }
     }
 }
+```
+
+## 质因数分解
+
+```java
+int num;
+List<Integer> ans=new ArrayList<>();
+for(int i=2;i<=Math.sqrt(num);i++){
+    while(num%i==0){//非质数的因数必先被分解
+        ans.add(i);
+        num/=i;
+    }
+    if(num<=1) break;
+}
+if(num>1) ans.add(num);
+return ans;
+```
+
+## 最大公约数gcd
+
+```java
+int gcd(int a,int b){
+    int temp=0;
+    while(b!=0){
+        temp=b;
+        b=a%b;
+        a=temp;
+    }
+    return a;
+}
+//最小公倍数
+int c=a*b/gcd(a,b);
 ```
 
 
@@ -56,20 +90,17 @@ for(int i=2;i<=Math.sqrt(n);i++){
 
 ```java
 int search(int[] nums, int target) {
-    int left =0,right = nums.length-1;
+    int left =0, right = nums.length; //搜索区间[left,right)
     while(left<right){
-        int mid = (left+right)/2;
-        if(nums[mid]>=target)
-            right=mid;
-        if(nums[mid]<target)
+        int mid = left + (right - left)/2;
+        if(nums[mid] < target)
             left = mid+1;
+        else
+            right = mid;
     }
-    return left;
+    return left;//lower_bound 返回 大于或等于 target的第一个元素位置
+    //upper_bound 改nums[mid]<=target 返回 大于 tar的第一个元素位置
 }
-常用模板两个：
-	while l < r:
-	(1) l = mid, r = mid - 1, 那么 mid = (l + r + 1) >> 1
-	(2) r = mid, l = mid + 1, 那么 mid = (l + r) >> 1
 ```
 
 ```java
@@ -78,29 +109,13 @@ Arrays.binarySearch(int[] arr, int target);
 
 
 
-## 区间动态规划
-
-所谓**区间dp**，指在一段区间上进行动态规划，一般做法是由长度较小的区间往长度较大的区间进行递推，最终得到整个区间的答案，而边界就是长度为1以及2的区间。
-
-区间dp常见的转移方程如下：
-
-```java
-int dp[i][j] = min{ dp[i][k] + dp[k+1][j]} + w(i,j) };   (i <= k < j)
-```
-
-其中`dp[i][j]`表示在区间`[i,j]`上的最优值，`w(i,j)`表示在转移时需要额外付出的代价，min也可以是max。
-
-为确保先得到子区段，保证父区段结果正确，一般按区段长度j-i递增顺序计算各区段值
 
 
+## 动态规划
 
-## 数位动态规划
+### 背包DP
 
-
-
-
-
-## 0-1背包
+#### 0-1背包
 
 背包容量(重量)限制下选取物品获得最大的价值，每种物品**最多选一次**
 
@@ -144,7 +159,7 @@ for(int i=0;i<items.length;i++){//遍历物品
 
 
 
-## 多重背包
+#### 多重背包
 
 背包容量(重量)限制下选取物品获得最大的价值，每种物品**最多选num次**
 
@@ -162,7 +177,7 @@ for(int i=0;i<items.length;i++){//遍历物品
 
 
 
-## 完全背包
+#### 完全背包
 
 背包容量(重量)限制下选取物品获得最大的价值，每种物品**选择次数不限**
 
@@ -180,7 +195,7 @@ for(int i=0;i<items.length;i++){//遍历物品
 
 ```java
 //组合方式数,物品按item内顺序出现
-dp[0]=1;
+dp[0]=1;/**/
 for(int i=0;i<items.length;i++){//先遍历物品
     for(int j=volume[i];j<=max_volume;j++){//再遍历容量
         dp[j]+=dp[j-volume[i]];
@@ -197,7 +212,7 @@ for(int j=0;j<=max_volume;j++){//先遍历容量
 
 
 
-## 分组背包
+#### 分组背包
 
 背包容量(重量)限制下在各组选取物品获得最大的价值，**每组物品最多选一个**
 
@@ -216,6 +231,28 @@ for(int i = 1; i <= n; i++){//遍历分组
 
 
 
+### 区间DP
+
+所谓**区间dp**，指在一段区间上进行动态规划，一般做法是由长度较小的区间往长度较大的区间进行递推，最终得到整个区间的答案，而边界就是长度为1以及2的区间。
+
+区间dp常见的转移方程如下：
+
+```java
+int dp[i][j] = min{ dp[i][k] + dp[k+1][j]} + w(i,j) };   (i <= k < j)
+```
+
+其中`dp[i][j]`表示在区间`[i,j]`上的最优值，`w(i,j)`表示在转移时需要额外付出的代价，min也可以是max。
+
+为确保先得到子区段，保证父区段结果正确，一般按区段长度j-i递增顺序计算各区段值
+
+
+
+### 树形DP
+
+由于树固有的递归性质，树形 DP 一般都是递归(DFS)进行的。以各个节点为根，依据条件设置不同状态的返回值
+
+
+
 ## BFS广度优先搜索
 
 在树中是层序遍历，耗时方差小于DFS
@@ -227,7 +264,6 @@ for(int i = 1; i <= n; i++){//遍历分组
 int BFS(Node start , Node target){
     Queue<Node> q;//结点队列
     Set<Node> visited;//记录已遍历结点，避免走回头路
-    
     q.offer(start);//起点入列
     visited.add(start);
     int step = 0;//记录扩散的步数
@@ -272,10 +308,10 @@ public static void floydWarshall(int[][] G) {
         for (i = 0; i < n; i++) {
             for (j = 0; j < n; j++) {
                 // 如果经过k节点距离更短，则更新 graph 数组
-                if (G[i][k] + G[k][j] < G[i][j]) {
+                if (G[i][j] > G[i][k] + G[k][j]) {
                     G[i][j] = G[i][k] + G[k][j];
                     P[i][j] = k;/* 记录路径:两节点间最短路径经过k
-                    			   打印路径:i经k到j，i到k，k到j之间可能有其他节点，递归搜索 */
+                    			  打印最短路径:i经k到j，i到k，k到j之间可能有其他节点，递归搜索 */
                 }
             }
         }
@@ -298,7 +334,7 @@ public static void floydWarshall(int[][] G) {
 时间复杂度O(n^2)，dis用**优先队列**优化后O(nlogn)
 
 ```java
-final int inf=500;//inf代表无穷，要大于最大结果
+final int inf=9000;//inf代表无穷，要大于最大结果，但注意与某段边长相加后不能溢出
 public int[] dijkstra(int[][] G,int source){//G为n*n的图,source为源点
     
     int n=G.length;//n代表图的顶点个数
@@ -307,8 +343,8 @@ public int[] dijkstra(int[][] G,int source){//G为n*n的图,source为源点
     dis[source]=0;//源点到源点的距离为0
     boolean[] vis=new boolean[n];//vis代表某个顶点是否被访问过
     
-    //使用一个for循环，循环n-1次，来寻找n-1个点到源点的最短距离
-    for(int i=0;i<n-1;i++){
+    //使用一个for循环，循环n次，来寻找n个点到源点的最短距离
+    for(int i=0;i<n;i++){
         int node=-1;//没有被访问过且距离源点最短的点
         for(int j=0;j<n;j++){
             if(!vis[j]&&(node==-1||dis[j]<dis[node])){
@@ -331,9 +367,9 @@ public int[] dijkstra(int[][] G,int source){//G为n*n的图,source为源点
 
 ## Bellman-Ford最短路径
 
-比Dijkstra算法更具普遍性，对边没有要求，可以处理负权边与负权回路。
+解决带权图的单源最短路径问题，比Dijkstra算法更具普遍性，对边没有要求，可以处理负权边与负权回路。
 
-核心思想
+核心思想 
 
 > **对所有的边进行n-1轮松弛操作**
 
@@ -381,25 +417,9 @@ public int[] Bellman(Edge[] edges,int source){
 
 
 
-## 最大公约数gcd
-
-```java
-int gcd(int a,int b){
-    int temp=0;
-    while(b!=0){
-        temp=b;
-        b=a%b;
-        a=temp;
-    }
-    return a;
-}
-//最小公倍数
-int c=a*b/gcd(a,b);
-```
-
-
-
 # 数据结构
+
+
 
 ## 单调栈
 
@@ -408,6 +428,8 @@ int c=a*b/gcd(a,b);
 所以单调栈一般用于解决一下几种问题：
 
 寻找左 / 右侧第一个比当前元素大 / 小的元素。
+
+
 
 
 ## 单调队列
@@ -461,9 +483,39 @@ System.out.println(q.poll());  //1，返回并删除队列的开头
 System.out.println(q.peek());  //2，返回队列的开头
 
 //创建自定义排序的优先队列
-PriorityQueue<Student> q = new PriorityQueue<Student>((a,b)->{
-    return b.val-a.val;
-});
+PriorityQueue<Student> q = new PriorityQueue<Student>((a,b)->b.val-a.val);
+```
+
+堆排序(构建大顶堆，输出最大值到末尾)
+
+```java
+void buildMaxHeap(int[] arr){//arr[0]无元素，根在arr[1]
+    for(int i=len/2;i>0;i--){//自下而上遍历非叶子结点
+        HeadAdjust(arr,i,arr.length);//将以i为结点的子树进行调整
+    }
+}
+void HeadAdjust(int[] arr,int k,int len){//O(logn)
+    arr[0]=arr[k];
+    for(int i=2*k;i<=len;i*=2){
+        if(i<len&&arr[i]<arr[i+1]){
+            i++;//选取较大的子节点下标
+        }
+        if(arr[0]>=arr[i]){
+            break;//结束筛选
+        }else{
+            arr[k]=arr[i];//较大的子节点向上调整
+            k=i;//继续向下筛选
+        }
+    }
+    arr[k]=arr[0];
+}
+void HeapSort(int[] arr){
+	buildMaxHeap(arr);//建堆
+    for(int i=len;i>1;i--){
+        swap(arr[0],arr[i]);//输出堆顶
+        HeadAdjust(arr,1,i-1);//调整剩余i-1个元素
+    }
+}
 ```
 
 
@@ -482,21 +534,21 @@ PriorityQueue<Student> q = new PriorityQueue<Student>((a,b)->{
   
   public int find(int[] map,int x){//返回x的根节点
       int p=x;
-      while(map[p]!=-1){//找出父节点p
+      while(map[p]!=-1){//找出根节点p
           p=map[p];
       }
-      int n=x,n2=x;
-      while(n!=p)//路径压缩
-          n=map[n];
-          map[n2]=p;
-          n2=n;
+      int n1=x,n2=x;
+      while(n1!=p){//路径压缩，使路径上的所有结点指向根结点
+          n1=map[n1];//n1指向父节点
+          map[n2]=p;//n2指向根节点
+          n2=n1;//n2尾随n1
       }
       return p;
   }
   
   public void union(int[] map,int x,int y){
-      int xRoot=search(map,x);
-      int yRoot=search(map,y);
+      int xRoot=find(map,x);
+      int yRoot=find(map,y);
       if(xRoot==yRoot) return;//同根不合并
       map[yRoot]=xRoot;
   }
@@ -554,7 +606,9 @@ public boolean exist(String str,TrieNode root){
 
 ## 树状数组
 
-区间和	查询和更新的时间复杂度为O(logn)
+树状数组是一种支持 **单点修改** 和 **区间和查询** 的，代码量小的数据结构。
+
+查询和更新的时间复杂度为O(logn)
 
 ```java
 class Fenwick {
